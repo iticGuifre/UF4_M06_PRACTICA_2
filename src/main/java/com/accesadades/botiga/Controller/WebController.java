@@ -7,8 +7,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.accesadades.botiga.Model.Category;
 import com.accesadades.botiga.Model.Product;
+import com.accesadades.botiga.Model.Subcategory;
+import com.accesadades.botiga.Service.CategoryService;
 import com.accesadades.botiga.Service.ProductService;
+import com.accesadades.botiga.Service.SubcategoryService;
+
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Controller
@@ -16,6 +22,12 @@ public class WebController {
  
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private SubcategoryService subcategoryService;
+    
+    @Autowired
+    private CategoryService categoryService;
  
     @RequestMapping(value = "/")
     public String index(Model model) {
@@ -38,8 +50,32 @@ public class WebController {
         return "search"; // Referencia a search.html en el directorio templates
     }
 
-    @RequestMapping(value = "/create")
-    public String create(Model model) {
+    @RequestMapping(value = "/crear", method = RequestMethod.GET)
+    public String showProductForm(Model model) {
+        Set<Subcategory> subcategories = subcategoryService.findAllSubcategories();
+        model.addAttribute("subcategories", subcategories);
         return "create";
     }
+
+    @RequestMapping(value = "/productes/desar", method = RequestMethod.POST)
+    public String saveProduct(@RequestParam("nom") String name,
+                              @RequestParam("descripcio") String description,
+                              @RequestParam("unitats") int units,
+                              @RequestParam("preu") float price,
+                              @RequestParam("fabricant") String company,
+                              @RequestParam("subcategoria") String subcategoryName,
+                              Model model) {
+        Subcategory subcategory = subcategoryService.findByName(subcategoryName);
+        Product product = new Product();
+        product.setName(name);
+        product.setDescription(description);
+        product.setUnits(units);
+        product.setPrice(price);
+        product.setCompany(company);
+        product.setSubcategory(subcategory);
+
+        productService.saveProduct(product);
+        return "redirect:/catalog";
+    }
 }
+

@@ -5,39 +5,27 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "product")
-public class Product implements Serializable {
+@Table(name = "category")
+public class Category implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long productId;
+    private long categoryId;
 
     @Column(nullable = false)
     private String name;
-
-    @Column
-    private String description;
-
-    @Column(nullable = false)
-    private String company;
-
-    @Column(nullable = false)
-    private float price;
-
-    @Column
-    private int units;
-
-    @ManyToOne
-    @JoinColumn(name = "subcategory_id", nullable = false)
-    private Subcategory subcategory;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "category")
+    private Set<Subcategory> subcategories;
 }
