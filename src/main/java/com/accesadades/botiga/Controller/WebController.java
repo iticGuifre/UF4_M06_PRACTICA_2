@@ -47,9 +47,10 @@ public class WebController {
             Product product = productService.findProductsByName(name);
             model.addAttribute("product", product);
         }
-        return "search"; // Referencia a search.html en el directorio templates
+        return "search";
     }
 
+    // Endpoint que mostra el formulari
     @RequestMapping(value = "/crear", method = RequestMethod.GET)
     public String showProductForm(Model model) {
         Set<Subcategory> subcategories = subcategoryService.findAllSubcategories();
@@ -57,6 +58,7 @@ public class WebController {
         return "create";
     }
 
+    //Endpoint on es guarda el nou producte inserit al formulari
     @RequestMapping(value = "/productes/desar", method = RequestMethod.POST)
     public String saveProduct(@RequestParam("nom") String name,
                               @RequestParam("descripcio") String description,

@@ -23,19 +23,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Set<Product> findAllProducts(String subcategory) {
-        // Implement if needed
-        return null;
-    }
-
-    @Override
-    public void increasePrice(Product product) {
-        // Implement if needed
-    }
-
-    @Override
     public void saveProduct(Product product) {
-        System.out.println("Saving product: " + product);
         productRepository.save(product);
     }
 }
